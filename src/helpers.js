@@ -4,7 +4,7 @@ export const calcTime = time => {
   return `${hours}h ${mins}m`;
 }
 
-export const convertMomey = money => {
+export const convertMoney = money => {
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',

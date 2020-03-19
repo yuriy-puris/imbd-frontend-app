@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { API_URL, API_KEY, API_BASE_URL, SEARCH_BASE_URL, POPULAR_BASE_URL, POSTER_SIZE, BACKDROP_SIZE, IMAGE_BASE_URL } from './config';
+import React, { useState } from 'react';
+import { SEARCH_BASE_URL, POPULAR_BASE_URL, POSTER_SIZE, BACKDROP_SIZE, IMAGE_BASE_URL } from './config';
 
 // components
 import HeroImage from './components/sharedComponents/HeroImage';
@@ -15,6 +15,7 @@ import { useHomeFetch } from './components/hooks/useHomeFetch';
 import NoImage from './images/no_image.jpg';
 
 const Home = () => {
+  const [searchTerm, setSearchTerm] = useState('');
   const [
     { 
       state: { movies, currentPage, totalPages, heroImage }, 
@@ -22,8 +23,7 @@ const Home = () => {
       error 
     },
     fetchMovies
-  ] = useHomeFetch();
-  const [searchTerm, setSearchTerm] = useState('');
+  ] = useHomeFetch(searchTerm);
 
   const loadMoreMovies = () => {
     const searchEndPoint = `${SEARCH_BASE_URL}&query=${searchTerm}&page=${currentPage + 1}`;

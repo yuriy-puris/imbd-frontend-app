@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { API_URL, API_KEY, SEARCH_BASE_URL, POPULAR_BASE_URL } from '../../config';
+import { POPULAR_BASE_URL } from '../../config';
 
-export const useHomeFetch = () => {
+export const useHomeFetch = searchTerm => {
   const [state, setState] = useState({ movies: []  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const fetchMovies = async endpoint => {
+  const fetchData = async endpoint => {
     setError(false);
     setLoading(true);
 
@@ -32,8 +32,19 @@ export const useHomeFetch = () => {
   }
 
   useEffect(() => {
-    fetchMovies(`${POPULAR_BASE_URL}`)
+    if ( sessionStorage.homeState ) {
+      setState(JSON.parse(sessionStorage.homeState));
+      setLoading(false);
+    } else {
+      fetchData(POPULAR_BASE_URL);
+    }
   }, [])
 
-  return [{ state, loading, error }, fetchMovies];
+  useEffect(() => {
+    if ( !searchTerm ) {
+      sessionStorage.setItem('homeState', JSON.stringify(state));
+    }
+  }, [searchTerm, state])
+
+  return [{ state, loading, error }, fetchData];
 }
